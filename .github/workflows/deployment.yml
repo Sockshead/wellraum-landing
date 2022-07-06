@@ -1,7 +1,7 @@
 name: Build and deploy to Docker & DigitalOcean
 
 on:
-  push: 
+  push:
     branches:
       - "main"
 
@@ -14,13 +14,13 @@ jobs:
         run: |
           npm install
 
-  test: 
+  test:
     runs-on: ubuntu-latest
     needs: build
     strategy:
       matrix:
         os: [ubuntu-latest]
-        node-version: [16.x] 
+        node-version: [16.x]
     steps:
       - uses: actions/checkout@v2.3.1
       - name: Use Node.Js ${{ matrix.node-version }}
@@ -31,10 +31,10 @@ jobs:
         run: |
           npm install
           npm run test:unit
-        env: 
+        env:
           CI: true
 
-  build-and-deploy: 
+  build-and-deploy:
     runs-on: ubuntu-latest
     needs: test
     steps:
@@ -49,19 +49,27 @@ jobs:
         run: docker build . --file Dockerfile --tag wellraum-landing --label "run-number=${GITHUB_RUN_ID}"
       - name: Push image
         run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
+          docker tag wellraum-landing ghcr.io/${{ github.repository_owner }}/wellraum-landing:latest
+          docker push $IMAGE_ID:latest
+
+          # UNUSED COMMANDS
+          # IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
           # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
           # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "main" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-          docker tag wellraum-landing $IMAGE_ID:$VERSION
-          docker push $IMAGE_ID:$VERSION
+          # [ "$VERSION" == "main" ] && VERSION=latest
+          # echo IMAGE_ID=$IMAGE_ID
+          # echo VERSION=$VERSION
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.PAT }}
       - name: Deploy Container to DigitalOcean
         uses: appleboy/ssh-action@master
         with:
@@ -69,19 +77,39 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
           script: |
-            IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
+            # Stop running container
+            docker stop ${{ github.repository }}
+
+            # Remove old container
+            docker rm ${{ github.repository }}
+
+            # Login to Github Container Registry
+            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+
+            # Pull the Docker Image 
+            docker pull ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+
+            # Run a new container from a new image
+            docker run -d \
+            --restart always \
+            -p 8000:8080 \
+            --name $(echo $${{ github.repository }})
+            #--env-file .env \
+
+            # UNUSED COMMANDS
+            # IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
             # Change all uppercase to lowercase
-            IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+            # IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
             # Strip git ref prefix from version
-            VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+            # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
             # Strip "v" prefix from tag name
-            [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+            # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
             # Use Docker `latest` tag convention
-            [ "$VERSION" == "main" ] && VERSION=latest
-            echo IMAGE_ID=$IMAGE_ID
-            echo VERSION=$VERSION
-            docker pull $IMAGE_ID:$VERSION
-            docker update --restart=no wellraum-landing || true
-            docker stop $(docker ps -a -q) || true
-            docker rm $(docker ps -a -q) || true
-            docker run -d --restart unsless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:$VERSION
+            #[ "$VERSION" == "main" ] && VERSION=latest
+            # echo IMAGE_ID=$IMAGE_ID
+            # echo VERSION=$VERSION
+            # docker pull $IMAGE_ID:$VERSION
+            # docker update --restart=no wellraum-landing || true
+            # docker stop $(docker ps -a -q) || true
+            # docker rm $(docker ps -a -q) || true
+            # docker run -d --restart unsless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:$VERSION
