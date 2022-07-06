@@ -76,13 +76,13 @@ jobs:
             # Change all uppercase to lowercase
             IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
-            # Pull the Docker Image 
-            docker pull $IMAGE_ID:latest
-            docker update --restart=no wellraum-landing || true
+            #docker update --restart=no wellraum-landing || true
             # Stop running container
             docker stop wellraum-landing
             # Remove old container
             docker rm wellraum-landing
+            # Pull the Docker Image 
+            docker pull $IMAGE_ID:latest
 
             # Run a new container from a new image
             docker run -d --restart unsless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:latest
