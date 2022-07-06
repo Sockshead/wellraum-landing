@@ -64,19 +64,13 @@ jobs:
           # [ "$VERSION" == "main" ] && VERSION=latest
           # echo IMAGE_ID=$IMAGE_ID
           # echo VERSION=$VERSION
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.PAT }}
       - name: Deploy Container to DigitalOcean
-        uses: appleboy/ssh-action@master
+        uses: fifsky/ssh-action@master #appleboy/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USERNAME }}
-          password: ${{ secrets.DO_PASSWORD }}
-          script: |
+          user: ${{ secrets.DO_USERNAME }}
+          pass: ${{ secrets.DO_PASSWORD }}
+          command: |
             IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
             # Change all uppercase to lowercase
             IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
