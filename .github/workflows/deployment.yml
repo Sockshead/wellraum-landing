@@ -82,7 +82,7 @@ jobs:
             IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
             # Pull the Docker Image 
-            docker pull $IMAGE_ID:$VERSION
+            docker pull $IMAGE_ID:latest
             # Stop running container
             docker stop $(docker ps -a -q) || true
             # Remove old container
