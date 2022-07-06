@@ -71,12 +71,14 @@ jobs:
           user: ${{ secrets.DO_USERNAME }}
           pass: ${{ secrets.DO_PASSWORD }}
           command: |
+            echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
             # Change all uppercase to lowercase
             IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
             # Pull the Docker Image 
             docker pull $IMAGE_ID:latest
+            docker update --restart=no wellraum-landing || true
             # Stop running container
             docker stop $(docker ps -a -q) || true
             # Remove old container
