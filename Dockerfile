@@ -1,15 +1,13 @@
-FROM node:16.15.1
-
-RUN mkdir -p usr/src/wellraum-landing
-
-COPY . /usr/src/wellraum-landing
-
-WORKDIR /usr/src/wellraum-landing
-
+# build stage
+FROM node:lts-alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
-
+COPY . .
 RUN npm run build
 
-EXPOSE 3001
-
-CMD [ "npm", "start" ]
+# production stage
+FROM nginx:stable-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
