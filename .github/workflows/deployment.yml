@@ -52,7 +52,7 @@ jobs:
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tag wellraum-landing IMAGE_ID:latest
+          docker tag wellraum-landing $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
 
           # UNUSED COMMANDS
@@ -77,29 +77,21 @@ jobs:
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }}
           script: |
-            # Stop running container
-            docker stop ${{ github.repository }}
-
-            # Remove old container
-            docker rm ${{ github.repository }}
-
-            # Login to Github Container Registry
-            docker login https://ghcr.io -u ${{ github.repository_owner }} -p ${{ secrets.CR_PAT }}
+            IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
+            # Change all uppercase to lowercase
+            IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
             # Pull the Docker Image 
-            docker pull ghcr.io/${{ github.repository_owner }}/${{ github.repository }}:latest
+            docker pull $IMAGE_ID:$VERSION
+            # Stop running container
+            docker stop $(docker ps -a -q) || true
+            # Remove old container
+            docker rm $(docker ps -a -q) || true
 
             # Run a new container from a new image
-            docker run -d \
-            --restart always \
-            -p 8000:8080 \
-            --name $(echo $${{ github.repository }})
-            #--env-file .env \
+            docker run -d --restart always -p 8000:8080 --name wellraum-landing $IMAGE_ID:$VERSION
 
             # UNUSED COMMANDS
-            # IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
-            # Change all uppercase to lowercase
-            # IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
             # Strip git ref prefix from version
             # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
             # Strip "v" prefix from tag name
