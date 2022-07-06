@@ -85,7 +85,7 @@ jobs:
             docker pull $IMAGE_ID:latest
 
             # Run a new container from a new image
-            docker run -d --restart always -p 3000:3000 --name $(echo ${{ github.repository }})
+            docker run -d --restart unless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:latest
 
             # UNUSED COMMANDS
             # Strip git ref prefix from version
@@ -100,4 +100,4 @@ jobs:
             # docker update --restart=no wellraum-landing || true
             # docker stop $(docker ps -a -q) || true
             # docker rm $(docker ps -a -q) || true
-            # docker run -d --restart unsless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:$VERSION
+            # docker run -d --restart unless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:$VERSION
