@@ -80,12 +80,12 @@ jobs:
             docker pull $IMAGE_ID:latest
             docker update --restart=no wellraum-landing || true
             # Stop running container
-            docker stop $(docker ps -a -q) || true
+            docker stop wellraum-landing
             # Remove old container
-            docker rm $(docker ps -a -q) || true
+            docker rm wellraum-landing
 
             # Run a new container from a new image
-            docker run -d --restart always -p 8000:8080 --name wellraum-landing $IMAGE_ID:$VERSION
+            docker run -d --restart unsless-stopped -p 3000:3000 --name wellraum-landing $IMAGE_ID:latest
 
             # UNUSED COMMANDS
             # Strip git ref prefix from version
