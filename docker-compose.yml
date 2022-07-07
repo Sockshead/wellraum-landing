@@ -1,5 +1,11 @@
-version: '2'
+version: "2"
 services:
+  nginx:
+    restart: always
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
   #nginx-proxy:
   #  restart: always
   #  image: nginxproxy/nginx-proxy
@@ -30,12 +36,12 @@ services:
     container_name: wellraum-site
     expose:
       - "8080"
-    ports:
-      - "8080:80"
-    #environment: 
-    #- VIRTUAL_HOST=wellraum.com
-    #- VIRTUAL_PORT=8080
-    #- LETSENCRYPT_HOST=wellraum.com
-    #- LETSENCRYPT_EMAIL=juan.posada@wellraum.com
-    #depends_on: 
-    #- nginx-proxy
+  #  ports:
+  #    - "8080:80"
+  #environment:
+  #- VIRTUAL_HOST=wellraum.com
+  #- VIRTUAL_PORT=8080
+  #- LETSENCRYPT_HOST=wellraum.com
+  #- LETSENCRYPT_EMAIL=juan.posada@wellraum.com
+  #depends_on:
+  #- nginx-proxy
