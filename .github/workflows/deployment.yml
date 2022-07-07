@@ -46,7 +46,7 @@ jobs:
           port: 22
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }} 
-          local_path: './docker-compose.yml'
+          local_path: '../../docker-compose.yml'
           remote_path: '/root/'
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
