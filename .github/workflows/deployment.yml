@@ -6,37 +6,37 @@ on:
       - "main"
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2.3.1
-      - name: npm install
-        run: |
-          npm install
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node-version: [16.x]
-    steps:
-      - uses: actions/checkout@v2.3.1
-      - name: Use Node.Js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install & test
-        run: |
-          npm install
-          npm run test:unit
-        env:
-          CI: true
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2.3.1
+#      - name: npm install
+#        run: |
+#          npm install
+#
+#  test:
+#    runs-on: ubuntu-latest
+#    needs: build
+#    strategy:
+#      matrix:
+#        os: [ubuntu-latest]
+#        node-version: [16.x]
+#    steps:
+#      - uses: actions/checkout@v2.3.1
+#      - name: Use Node.Js ${{ matrix.node-version }}
+#        uses: actions/setup-node@v1
+#        with:
+#          node-version: ${{ matrix.node-version }}
+#      - name: npm install & test
+#        run: |
+#          npm install
+#          npm run test:unit
+#        env:
+#          CI: true
 
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: test
+    #needs: test
     steps:
       - uses: actions/checkout@v2.3.1
       - name: Login to GitHub Container Registry
@@ -62,16 +62,17 @@ jobs:
           pass: ${{ secrets.DO_PASSWORD }}
           command: |
             echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
-            IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
+            #IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
             # Change all uppercase to lowercase
-            IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+            #IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
             # Stop running container
-            docker stop wellraum-landing
+            #docker stop wellraum-landing
             # Remove old container
-            docker rm wellraum-landing
+            #docker rm wellraum-landing
             # Pull the Docker Image 
-            docker pull $IMAGE_ID:latest
+            #docker pull $IMAGE_ID:latest
 
             # Run a new container from a new image
-            docker run -it -d --restart unless-stopped -p 8080:80 --name wellraum-landing $IMAGE_ID:latest
+            #docker run -it -d --restart unless-stopped -p 8080:80 --name wellraum-landing $IMAGE_ID:latest
+            docker-compose -f "docker-compose.yml" up -d --build
