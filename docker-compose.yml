@@ -24,7 +24,7 @@ services:
     image: ghcr.io/sockshead/wellraum-landing:latest
     restart: unless-stopped
     ports:
-      - 80:80
+      - 8080:80
   #www:
   #  image: nginx
   #  restart: always
