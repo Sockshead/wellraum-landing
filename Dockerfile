@@ -1,12 +1,13 @@
 # build stage
-FROM node:lts-alpine as build-stage
-RUN mkdir -p usr/src/wellraum-app
-COPY . /usr/src/wellraum-app
-WORKDIR /usr/src//wellraum-app
+FROM node:latest as build-stage
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
+COPY ./ .
 RUN npm run build
 
 # production stage
 FROM nginx as production-stage
-COPY --from=build-stage /usr/src/wellraum-app/dist /usr/share/nginx/html
-CMD ["nginx", "-g", "daemon off;"]
+RUN mkdir /app
+COPY --from=build-stage /app/dist /app
+COPY nginx.conf /etc/nginx/nginx.conf

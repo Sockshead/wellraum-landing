@@ -1,6 +1,4 @@
-node_modules
-build
-dist
-.dockerignore
-Dockerfile
-Dockerfile.prod
+**/node_modules
+**/dist
+**/.dockerignore
+**/Dockerfile
