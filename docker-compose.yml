@@ -10,8 +10,7 @@ services:
       - "/usr/share/nginx/html"
       - "/var/run/docker.sock:/tmp/docker.sock:ro"
       - "/etc/nginx/certs"
-
-  letsencrypt-nginx-proxy-companion:
+  letsencrypt:
     restart: always
     image: jrcs/letsencrypt-nginx-proxy-companion
     volumes:
@@ -21,9 +20,9 @@ services:
   wellraum-site:
     image: ghcr.io/sockshead/wellraum-landing:latest
     restart: unless-stopped
-    expose:
-      - "80"
-      - "443"
+    depends_on:
+      - nginx-proxy
+      - letsencrypt
   #www:
   #  image: nginx
   #  restart: always
