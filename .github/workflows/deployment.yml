@@ -50,6 +50,14 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker tag wellraum-landing $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
+      - name: Transfer Docker Compose to remote
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.3
+        with:
+          server: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }} 
+          local_path: '../../docker-compose.yml'
+          remote_path: '/root/'
       - name: Deploy Container to DigitalOcean
         uses: fifsky/ssh-action@master
         with:
