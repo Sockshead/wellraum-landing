@@ -20,7 +20,7 @@ services:
   #    - /etc/nginx/certs:/etc/nginx/certs
   #    - /usr/share/nginx/html:/usr/share/nginx/html
   #    - /var/run/docker.sock:/var/run/docker.sock
-  app:
+  wellraum-site:
     image: ghcr.io/sockshead/wellraum-landing:latest
     restart: unless-stopped
     ports:

@@ -64,16 +64,3 @@ jobs:
             echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             docker-compose down --remove-orphans
             docker-compose -f "docker-compose.yml" up -d --build
-
-            # UNUSED COMMANDS
-            #IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
-            # Change all uppercase to lowercase
-            #IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-            # Stop running container
-            #docker stop wellraum-landing
-            # Remove old container
-            #docker rm wellraum-landing
-            # Pull the Docker Image 
-            #docker pull $IMAGE_ID:latest
-            # Run a new container from a new image
-            #docker run -it -d --restart unless-stopped -p 8080:80 --name wellraum-landing $IMAGE_ID:latest
