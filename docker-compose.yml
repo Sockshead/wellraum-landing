@@ -20,6 +20,9 @@ services:
   wellraum-site:
     image: ghcr.io/sockshead/wellraum-landing:latest
     restart: unless-stopped
+    ports: 
+    - "3000:80"
+    - "3000:443"
     depends_on:
       - nginx-proxy
       - letsencrypt
