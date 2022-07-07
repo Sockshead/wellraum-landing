@@ -15,7 +15,7 @@ services:
       - "/etc/nginx/certs"
   acme-companion:
     restart: always
-    image: jrcs/letsencrypt-nginx-proxy-companion
+    image: nginxproxy/acme-companion
     environment:
       - DEFAULT_EMAIL="juancapoar@gmail.com"
     volumes:
