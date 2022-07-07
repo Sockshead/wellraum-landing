@@ -57,8 +57,8 @@ jobs:
           port: 22
           username: ${{ secrets.DO_USERNAME }}
           password: ${{ secrets.DO_PASSWORD }} 
-          local-dir: ../../docker-compose.yml
-          server-dir: /root/
+          sourceDir: ../../docker-compose.yml
+          targetDir: /root/
       - name: Deploy Container to DigitalOcean
         uses: fifsky/ssh-action@master
         with:
