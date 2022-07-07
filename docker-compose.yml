@@ -1,15 +1,15 @@
 services:
-  #nginx-proxy:
-  #  restart: always
-  #  image: jwilder/nginx-proxy
-  #  ports:
-  #    - "80:80"
-  #    - "443:443"
-  #  volumes:
-  #    - "/etc/nginx/vhost.d"
-  #    - "/usr/share/nginx/html"
-  #    - "/var/run/docker.sock:/tmp/docker.sock:ro"
-  #    - "/etc/nginx/certs"
+  nginx-proxy:
+    restart: always
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/etc/nginx/vhost.d"
+      - "/usr/share/nginx/html"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "/etc/nginx/certs"
   #letsencrypt:
   #  restart: always
   #  image: jrcs/letsencrypt-nginx-proxy-companion
