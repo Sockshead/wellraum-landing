@@ -5,6 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
+CMD ["npm", "serve"]
 
 # production stage
 FROM nginx:stable-alpine as production-stage
