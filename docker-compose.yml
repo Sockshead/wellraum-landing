@@ -1,19 +1,19 @@
 version: '2'
 services:
-  nginx-proxy:
-    restart: always
-    image: nginxproxy/nginx-proxy
-    container_name: nginx-proxy
-    environment:
-      - DEFAULT_HOST=wellraum.com
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/etc/nginx/vhost.d"
-      - "/usr/share/nginx/html"
-      - "/var/run/docker.sock:/tmp/docker.sock:ro"
-      - "/etc/nginx/certs"
+  #nginx-proxy:
+  #  restart: always
+  #  image: nginxproxy/nginx-proxy
+  #  container_name: nginx-proxy
+  #  environment:
+  #    - DEFAULT_HOST=wellraum.com
+  #  ports:
+  #    - "80:80"
+  #    - "443:443"
+  #  volumes:
+  #    - "/etc/nginx/vhost.d"
+  #    - "/usr/share/nginx/html"
+  #    - "/var/run/docker.sock:/tmp/docker.sock:ro"
+  #    - "/etc/nginx/certs"
   #acme-companion:
   #  restart: always
   #  image: nginxproxy/acme-companion:latest
@@ -30,10 +30,12 @@ services:
     container_name: wellraum-site
     expose:
       - "8080"
-    environment: 
-    - VIRTUAL_HOST=wellraum.com
-    - VIRTUAL_PORT=8080
+    ports:
+      - "8080:80"
+    #environment: 
+    #- VIRTUAL_HOST=wellraum.com
+    #- VIRTUAL_PORT=8080
     #- LETSENCRYPT_HOST=wellraum.com
     #- LETSENCRYPT_EMAIL=juan.posada@wellraum.com
-    depends_on: 
-    - nginx-proxy
+    #depends_on: 
+    #- nginx-proxy
