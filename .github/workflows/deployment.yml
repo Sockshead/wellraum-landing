@@ -39,6 +39,15 @@ jobs:
     #needs: test
     steps:
       - uses: actions/checkout@v2.3.1
+      - name: Transfer Docker Compose to remote
+        uses: AbleLincoln/push-to-sftp@v1.0
+        with:
+          host: ${{ secrets.DO_HOST }}
+          port: 22
+          username: ${{ secrets.DO_USERNAME }}
+          password: ${{ secrets.DO_PASSWORD }} 
+          sourceDir: ./wellraum-landing/docker-compose.yml
+          targetDir: /root/
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
       - name: Build image
@@ -50,15 +59,6 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker tag wellraum-landing $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
-      - name: Transfer Docker Compose to remote
-        uses: AbleLincoln/push-to-sftp@v1.0
-        with:
-          host: ${{ secrets.DO_HOST }}
-          port: 22
-          username: ${{ secrets.DO_USERNAME }}
-          password: ${{ secrets.DO_PASSWORD }} 
-          sourceDir: ./docker-compose.yml
-          targetDir: /root/
       - name: Deploy Container to DigitalOcean
         uses: fifsky/ssh-action@master
         with:
