@@ -31,17 +31,34 @@ services:
     expose:
       - "8080"
     volumes:
-      - "app:/app/dist"
-  nginx:
+      - /app/node_modules
+      - /app:/var/www/html/
+    networks: 
+    - app-network
+  wellraum-nginx:
+    depends_on:
+    - wellraum-site
+    image: ghcr.io/sockshead/wellraum-nginx:latest
+    container_name: wellraum-nginx
     restart: always
-    image: nginx
-    container_name: nginx
+    tty: true
     ports:
-      - "80:80"
-    volumes:
-      - "app:/usr/share/nginx/html"
-volumes:
-  app:
+      - 80:80
+    networks:
+    - app-network
+networks:
+  app-network:
+    driver: bridge
+#  nginx:
+#    restart: always
+#    image: nginx
+#    container_name: nginx
+#    ports:
+#      - "80:80"
+#    volumes:
+#      - "app:/usr/share/nginx/html"
+#volumes:
+#  app:
 
   #  ports:
   #    - "8080:80"
