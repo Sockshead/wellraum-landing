@@ -1,11 +1,5 @@
 version: "2"
 services:
-  nginx:
-    restart: always
-    image: nginx
-    container_name: nginx
-    ports:
-      - "80:80"
   #nginx-proxy:
   #  restart: always
   #  image: nginxproxy/nginx-proxy
@@ -36,6 +30,21 @@ services:
     container_name: wellraum-site
     expose:
       - "8080"
+    ports:
+      - "8080:80"
+    volumes:
+      - "app:/app/dist"
+  nginx:
+    restart: always
+    image: nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - "app:/usr/share/nginx/html"
+volumes:
+  app:
+
   #  ports:
   #    - "8080:80"
   #environment:
