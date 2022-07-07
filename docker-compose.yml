@@ -8,7 +8,6 @@ services:
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock:ro
       - /etc/nginx/certs:/etc/nginx/certs
-      - /etc/nginx/vhost.d:/etc/nginx/vhost.d
       - /usr/share/nginx/html:/usr/share/nginx/html
     labels:
       - com.github.jrcs.letsencrypt_nginx_proxy_companion.nginx_proxy
@@ -20,7 +19,6 @@ services:
       - NGINX_PROXY_CONTAINER=nginx-proxy
     volumes:
       - /etc/nginx/certs:/etc/nginx/certs
-      - /etc/nginx/vhost.d:/etc/nginx/vhost.d
       - /usr/share/nginx/html:/usr/share/nginx/html
       - /var/run/docker.sock:/var/run/docker.sock
   
@@ -35,10 +33,10 @@ services:
     restart: always
     expose:
       - "80"
+      - '443'
     volumes:
       - /app/dist
     environment:
-      - VIRTUAL_HOST=wellraum.com,www.wellraum.com
       - LETSENCRYPT_HOST=wellraum.com,www.wellraum.com
       - LETSENCRYPT_EMAIL=juancapoar@gmail.com
     depends_on:
