@@ -23,6 +23,8 @@ services:
       - "/etc/acme.sh"
     volumes_from:
       - "nginx-proxy"
+    depends_on:
+    - nginx-proxy
   wellraum-site:
     image: ghcr.io/sockshead/wellraum-landing:latest
     restart: unless-stopped
@@ -33,3 +35,6 @@ services:
     - LETSENCRYPT_HOST=wellraum.com
     - VIRTUAL_PORT=8080
     - LETSENCRYPT_EMAIL=juancapoar@gmail.com
+    depends_on:
+    - nginx-proxy
+    - acme-companion
