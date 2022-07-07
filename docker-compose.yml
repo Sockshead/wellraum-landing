@@ -35,3 +35,5 @@ services:
     - VIRTUAL_PORT=8080
     #- LETSENCRYPT_HOST=wellraum.com
     #- LETSENCRYPT_EMAIL=juan.posada@wellraum.com
+    depends_on: 
+    - nginx-proxy
