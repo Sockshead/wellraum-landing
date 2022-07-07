@@ -1,4 +1,4 @@
-**/node_modules
-**/dist
-**/.dockerignore
-**/Dockerfile
+node_modules
+dist
+.dockerignore
+Dockerfile
