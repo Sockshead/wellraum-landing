@@ -59,7 +59,7 @@ jobs:
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
           docker tag wellraum-landing $IMAGE_ID:latest
           docker push $IMAGE_ID:latest
-      - name: Deploy Container to DigitalOcean
+      - name: Deploy Compose on DigitalOcean
         uses: fifsky/ssh-action@master
         with:
           host: ${{ secrets.DO_HOST }}

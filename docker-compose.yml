@@ -1,39 +1,35 @@
 version: '2'
 services:
-  wellraum-site:
-    restart: always
-    image: ghcr.io/sockshead/wellraum-landing:latest
-    container_name: wellraum-site
-    expose:
-      - "80"
-    environment: 
-    - VIRTUAL_HOST=wellraum.com,www.wellraum.com
-    - LETSENCRYPT_HOST=wellraum.com,www.wellraum.com
-    - VIRTUAL_PORT=80
-    - LETSENCRYPT_EMAIL=juan.posada@wellraum.com
   nginx-proxy:
     restart: always
     image: nginxproxy/nginx-proxy
-    container_name: nginx-proxy
     environment:
-      - DEFAULT_HOST=wellraum.com,www.wellraum.com
+      - DEFAULT_HOST=wellraum.com
     ports:
       - "80:80"
       - "443:443"
     volumes:
-      - /etc/nginx/vhost.d
-      - /usr/share/nginx/html
-      - /etc/nginx/certs:ro
-      - /var/run/docker.sock:/tmp/docker.sock:ro
+      - "/etc/nginx/vhost.d"
+      - "/usr/share/nginx/html"
+      - "/var/run/docker.sock:/tmp/docker.sock:ro"
+      - "/etc/nginx/certs"
   acme-companion:
     restart: always
     image: nginxproxy/acme-companion:latest
-    container_name: nginx-proxy-acme
     environment:
       - DEFAULT_EMAIL="juan.posada@wellraum.com"
     volumes:
-      - /etc/nginx/certs:rw
-      - /etc/acme.sh
-      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/etc/acme.sh"
     volumes_from:
       - "nginx-proxy"
+  wellraum-site:
+    restart: always
+    image: ghcr.io/sockshead/wellraum-landing:latest
+    expose:
+      - "8080"
+    environment: 
+    - VIRTUAL_HOST=wellraum.com
+    - LETSENCRYPT_HOST=wellraum.com
+    - VIRTUAL_PORT=8080
+    - LETSENCRYPT_EMAIL=juan.posada@wellraum.com
