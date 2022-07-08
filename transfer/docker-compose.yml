@@ -4,11 +4,15 @@ services:
     image: ghcr.io/sockshead/wellraum-landing:latest
     container_name: wellraum-site
     restart: always
+    expose:
+    - '8080'
     ports:
       - 8080:8080
     volumes:
       - app:/app/dist
   webserver:
+    depends_on: 
+    - wellraum-site
     image: nginx:latest
     container_name: webserver
     restart: always
