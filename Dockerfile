@@ -8,10 +8,5 @@ RUN npm run build
 
 # production stage
 FROM nginx as production-stage
-RUN mkdir /app
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY --from=build-stage /app/dist /app
-#COPY ./nginx.conf /etc/nginx/nginx.conf
-#RUN rm -rf /usr/share/nginx/html/*
-#COPY --from=build-stage /app/dist /usr/share/nginx/html
-#CMD ["nginx", "-g", "daemon off;"]
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]

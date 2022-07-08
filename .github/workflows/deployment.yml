@@ -39,7 +39,7 @@ jobs:
     #needs: test
     steps:
       - uses: actions/checkout@v2.3.1
-      - name: Transfer Docker Compose to remote
+      - name: Transfer files to remote
         uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.DO_HOST }}
@@ -50,7 +50,7 @@ jobs:
           remote_path: '/root/'
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
-      - name: Build image front end image
+      - name: Build front end image
         run: docker build . --file Dockerfile --tag wellraum-landing
       - name: Push front end image
         run: |

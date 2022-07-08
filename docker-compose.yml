@@ -3,6 +3,7 @@ services:
   nginx-proxy:
     restart: always
     image: nginxproxy/nginx-proxy
+    container_name: nginx-proxy
     environment:
       - DEFAULT_HOST=wellraum.com
     ports:
@@ -16,8 +17,9 @@ services:
   acme-companion:
     restart: always
     image: nginxproxy/acme-companion
+    container_name: acme-companion
     environment:
-      - DEFAULT_EMAIL="juancapoar@gmail.com"
+      - DEFAULT_EMAIL="juan.posada@wellraum.com"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/etc/acme.sh"
@@ -25,11 +27,12 @@ services:
       - "nginx-proxy"
   wellraum-site:
     image: ghcr.io/sockshead/wellraum-landing:latest
-    restart: unless-stopped
+    restart: always
+    container_name: wellraum-site
     expose:
       - "8080"
     environment: 
     - VIRTUAL_HOST=wellraum.com
     - LETSENCRYPT_HOST=wellraum.com
     - VIRTUAL_PORT=8080
-    - LETSENCRYPT_EMAIL=juancapoar@gmail.com
+    - LETSENCRYPT_EMAIL=juan.posada@wellraum.com
