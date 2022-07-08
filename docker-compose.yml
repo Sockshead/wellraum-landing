@@ -27,6 +27,7 @@ services:
       - "nginx-proxy"
   wellraum-site:
     image: ghcr.io/sockshead/wellraum-landing:latest
+    build: .
     restart: always
     container_name: wellraum-site
     expose:
