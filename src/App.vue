@@ -4,11 +4,11 @@ import HelloWorld from "@/components/HelloWorld.vue";
 </script>
 
 <template>
-	<header>
+	<!--<header>
 		<img
 			alt="Vue logo"
 			class="logo"
-			src="@/assets/logo.svg"
+			src="@/assets/wellraum.jpeg"
 			width="125"
 			height="125"
 		/>
@@ -23,20 +23,31 @@ import HelloWorld from "@/components/HelloWorld.vue";
 		</div>
 	</header>
 
-	<RouterView />
+	<RouterView />-->
+
+	<img class="screen" src="@/assets/wellraum.jpeg" alt="Wellraum logo" />
 </template>
 
 <style>
 @import "@/assets/base.css";
 #app {
-	max-width: 1280px;
+	max-height: 100vh;
+	overflow-y: hidden;
+	background-color: #f7f7f7;
+	/*max-width: 1280px;
 	margin: 0 auto;
 	padding: 2rem;
-	font-weight: normal;
+	font-weight: normal;*/
 }
 header {
 	line-height: 1.5;
 	max-height: 100vh;
+}
+.screen {
+	display: block;
+	max-height: 100vh;
+	margin-left: auto;
+	margin-right: auto;
 }
 .logo {
 	display: block;
@@ -74,7 +85,7 @@ nav a:first-of-type {
 	border: 0;
 }
 @media (min-width: 1024px) {
-	body {
+	/*body {
 		display: flex;
 		place-items: center;
 	}
@@ -82,7 +93,7 @@ nav a:first-of-type {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		padding: 0 2rem;
-	}
+	}*/
 	header {
 		display: flex;
 		place-items: center;
