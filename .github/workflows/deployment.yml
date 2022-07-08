@@ -69,4 +69,5 @@ jobs:
           command: |
             echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
             docker-compose down --remove-orphans
+            docker-compose pull
             docker-compose -f docker-compose.yml up -d --build
