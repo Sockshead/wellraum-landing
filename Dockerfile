@@ -1,9 +1,9 @@
 # build stage
-FROM node:lts-alpine as build-stage
-RUN mkdir -p usr/src/wellraum-landing
-COPY . /usr/src/wellraum-landing
-WORKDIR /usr/src/wellraum-landing
+FROM node:lts-alpine 
+WORKDIR /app
+COPY package*.json ./
 RUN npm install
+COPY . .
 RUN npm run build
 
 # production stage
