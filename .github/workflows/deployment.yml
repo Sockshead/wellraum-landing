@@ -50,17 +50,8 @@ jobs:
           remote_path: '/root/'
       - name: Login to GitHub Container Registry
         run: echo ${{ secrets.PAT }} | docker login ghcr.io -u ${{ github.repository_owner }} --password-stdin
-      - name: Build image server image
-        run: docker build . --file ./nginx/Dockerfile --tag wellraum-nginx
       - name: Build image front end image
         run: docker build . --file Dockerfile --tag wellraum-landing
-      - name: Push server image
-        run: |
-          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-nginx
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-          docker tag wellraum-nginx $IMAGE_ID:latest
-          docker push $IMAGE_ID:latest
       - name: Push front end image
         run: |
           IMAGE_ID=ghcr.io/${{ github.repository_owner }}/wellraum-landing
