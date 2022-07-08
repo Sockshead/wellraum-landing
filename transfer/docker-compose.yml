@@ -4,8 +4,6 @@ services:
     image: ghcr.io/sockshead/wellraum-landing:latest
     container_name: wellraum-site
     restart: always
-    expose:
-      - "8080"
     volumes:
       - app:/usr/src/wellraum-landing/dist:ro
   webserver:
