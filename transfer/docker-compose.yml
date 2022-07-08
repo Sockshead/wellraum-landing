@@ -1,0 +1,30 @@
+version: '3'
+services:
+  wellraum-site:
+    image: ghcr.io/sockshead/wellraum-landing:latest
+    container_name: wellraum-site
+    restart: always
+    expose:
+      - "8080"
+    volumes:
+      - app:/usr/src/wellraum-landing/dist:ro
+  webserver:
+    image: nginx:latest
+    container_name: webserver
+    restart: always
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx/:/etc/nginx/conf.d/:ro
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+      - app:/usr/share/nginx/html:rw
+  certbot:
+    image: certbot/certbot:latest
+    container_name: certbot
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+volumes:
+  app:
