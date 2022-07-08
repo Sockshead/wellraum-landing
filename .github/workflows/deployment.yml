@@ -35,7 +35,7 @@ jobs:
 #          CI: true
   build-and-deploy:
     runs-on: ubuntu-latest
-    needs: build
+    #needs: build
     steps:
       - uses: actions/checkout@v2.3.1
       - name: Transfer files to remote
